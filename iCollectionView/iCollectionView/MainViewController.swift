@@ -35,7 +35,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     /** init模型数据 */
     private func initData() {
         imagePaths = NSBundle.mainBundle().pathsForResourcesOfType("jpg", inDirectory: "SupportFiles")
-        self.collectionView.numberOfTotalItems = imagePaths.count
+        self.collectionView.totalNumberOfItems = imagePaths.count
     }
     /** init通知消息 */
     private func initNotifications() {
@@ -72,22 +72,24 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     //MARK: - UICollectionViewDataSource
     /** numberOfSections */
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        return  self.collectionView.numberOfTotalSections
+        print("\(__FUNCTION__):\(self.collectionView.totalNumberOfSections)")
+        return  self.collectionView.totalNumberOfSections
     }
     /** numberOfItemsInSection */
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if section == self.collectionView.numberOfTotalSections - 1
+        print("\(__FUNCTION__):\(self.collectionView.maxNumberOfItemsInSection)")
+        if section == self.collectionView.totalNumberOfSections - 1
         {
-            return self.collectionView.numberOfTotalItems % self.collectionView.getItemMaxNumberOfEverySection()
+            return self.collectionView.totalNumberOfItems % self.collectionView.maxNumberOfItemsInSection
         }
-        return self.collectionView.getItemMaxNumberOfEverySection()
+        return self.collectionView.maxNumberOfItemsInSection
     }
     /** cellForItemAtIndexPath */
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cellID = "ReuseCell"
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellID, forIndexPath: indexPath)
         let imageView = cell.viewWithTag(1) as! UIImageView
-        imageView.image = UIImage(contentsOfFile: imagePaths[indexPath.section*self.collectionView.getItemMaxNumberOfEverySection()+indexPath.row])
+        imageView.image = UIImage(contentsOfFile: imagePaths[indexPath.section*self.collectionView.maxNumberOfItemsInSection + indexPath.row])
         imageView.layer.opacity = 0.5
         
         return cell
