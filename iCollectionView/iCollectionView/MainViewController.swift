@@ -35,6 +35,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     /** init模型数据 */
     private func initData() {
         imagePaths = NSBundle.mainBundle().pathsForResourcesOfType("jpg", inDirectory: "SupportFiles")
+        self.collectionView.numberOfTotalItems = imagePaths.count
     }
     /** init通知消息 */
     private func initNotifications() {
@@ -58,44 +59,41 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         default:
             break
         }
-        
     }
     /** update视图布局 */
     private func updateLayout() {
         //collectionView布局设置
-        /*
-        let sectionInsetTop: CGFloat = 40
-        let sectionInsetBottom: CGFloat = 20
-        let sectionInsetHorizontal: CGFloat = 20
-        self.collectionView.frame = CGRect(x: sectionInsetHorizontal, y: sectionInsetTop, width: self.view.bounds.width - sectionInsetHorizontal * 2, height: self.view.bounds.height - sectionInsetTop - sectionInsetBottom )
-        */
         let itemWidth: CGFloat = 125
         let itemSpace: CGFloat = 5
         self.collectionView.setItemWidth(itemWidth: itemWidth)
         self.collectionView.setItemSpacing(itemSpacing: itemSpace)
-
     }
     /*********************************************************************/
     //MARK: - UICollectionViewDataSource
     /** numberOfSections */
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        return 2
+        return  self.collectionView.numberOfTotalSections
     }
     /** numberOfItemsInSection */
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return imagePaths.count
+        if section == self.collectionView.numberOfTotalSections - 1
+        {
+            return self.collectionView.numberOfTotalItems % self.collectionView.getItemMaxNumberOfEverySection()
+        }
+        return self.collectionView.getItemMaxNumberOfEverySection()
     }
     /** cellForItemAtIndexPath */
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cellID = "ReuseCell"
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellID, forIndexPath: indexPath)
-        
         let imageView = cell.viewWithTag(1) as! UIImageView
-        imageView.image = UIImage(contentsOfFile: imagePaths[indexPath.row])
+        imageView.image = UIImage(contentsOfFile: imagePaths[indexPath.section*self.collectionView.getItemMaxNumberOfEverySection()+indexPath.row])
         imageView.layer.opacity = 0.5
         
         return cell
     }
+    /*********************************************************************/
+    //MARK: - UICollectionViewDelegate
     /** didSelectItemAtIndexPath */
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let cell = collectionView.cellForItemAtIndexPath(indexPath)
