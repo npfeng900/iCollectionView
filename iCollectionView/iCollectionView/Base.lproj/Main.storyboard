@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="redraw" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ogR-k9-abU" customClass="MyCollectionView" customModule="iCollectionView">
-                                <rect key="frame" x="20" y="40" width="560" height="540"/>
+                                <rect key="frame" x="0.0" y="40" width="600" height="540"/>
                                 <color key="backgroundColor" red="1" green="0.91173360059999997" blue="0.908404879" alpha="1" colorSpace="calibratedRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="H7z-2G-yHl">
                                     <size key="itemSize" width="200" height="200"/>
@@ -59,8 +59,8 @@
                         <constraints>
                             <constraint firstItem="ogR-k9-abU" firstAttribute="top" secondItem="mCY-y8-Bgz" secondAttribute="bottom" constant="20" id="1eK-bQ-qJh"/>
                             <constraint firstItem="ogR-k9-abU" firstAttribute="bottom" secondItem="5tD-iB-3wj" secondAttribute="top" constant="-20" id="Bjx-Ft-KHN"/>
-                            <constraint firstItem="ogR-k9-abU" firstAttribute="trailing" secondItem="jJA-pX-eK0" secondAttribute="trailingMargin" id="Occ-dX-GrV"/>
-                            <constraint firstItem="ogR-k9-abU" firstAttribute="leading" secondItem="jJA-pX-eK0" secondAttribute="leadingMargin" id="Wq8-bt-Bxb"/>
+                            <constraint firstItem="ogR-k9-abU" firstAttribute="trailing" secondItem="jJA-pX-eK0" secondAttribute="trailingMargin" constant="20" id="Occ-dX-GrV"/>
+                            <constraint firstItem="ogR-k9-abU" firstAttribute="leading" secondItem="jJA-pX-eK0" secondAttribute="leadingMargin" constant="-20" id="Wq8-bt-Bxb"/>
                         </constraints>
                     </view>
                     <connections>

@@ -63,7 +63,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     /** update视图布局 */
     private func updateLayout() {
         //collectionView布局设置
-        let itemWidth: CGFloat = 125
+        let itemWidth: CGFloat = 135
         let itemSpace: CGFloat = 5
         self.collectionView.setItemWidth(itemWidth: itemWidth)
         self.collectionView.setItemSpacing(itemSpacing: itemSpace)
@@ -72,12 +72,10 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     //MARK: - UICollectionViewDataSource
     /** numberOfSections */
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        print("\(__FUNCTION__):\(self.collectionView.totalNumberOfSections)")
         return  self.collectionView.totalNumberOfSections
     }
     /** numberOfItemsInSection */
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print("\(__FUNCTION__):\(self.collectionView.maxNumberOfItemsInSection)")
         if section == self.collectionView.totalNumberOfSections - 1
         {
             return self.collectionView.totalNumberOfItems % self.collectionView.maxNumberOfItemsInSection

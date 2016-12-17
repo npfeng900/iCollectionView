@@ -10,36 +10,35 @@ import UIKit
 
 class MyCollectionView: UICollectionView {
 
-    /** 布局信息 */
     private let flowLayout = UICollectionViewFlowLayout()
+    /** 布局信息 */
     private var itemWidth: CGFloat = 125 {
         didSet{
             updateViews()
-            self.reloadData() //调用UICollectionViewDataSource代理方法,
-            print("\(__FUNCTION__): \(totalNumberOfSections) \(maxNumberOfItemsInSection)")
+            self.reloadData() //调用UICollectionViewDataSource代理方法,方法执行时间可能滞后或者不执行
         }
     }
     private var itemSpacing: CGFloat = 5 {
         didSet{
             updateViews()
-            self.reloadData() //调用UICollectionViewDataSource代理方法
-            print("\(__FUNCTION__): \(totalNumberOfSections) \(maxNumberOfItemsInSection)")
+            self.reloadData() //调用UICollectionViewDataSource代理方法,方法执行时间可能滞后或者不执行
         }
     }
     /** 数据信息 */
     var totalNumberOfItems: Int = 0 {
         didSet{
-            self.reloadData()
+            self.reloadData() //调用UICollectionViewDataSource代理方法,方法执行时间可能滞后或者不执行
         }
     }
+    /** 只读计算属性 */
     private var columnsNum: Int {
         get{ 
-            return Int(floor(self.bounds.width / itemWidth))
+            return Int(floor(self.bounds.width / (itemWidth + itemSpacing)))
         }
     }
     private var rowsNum: Int {
         get{
-            return Int(floor(self.bounds.height / itemWidth))
+            return Int(floor(self.bounds.height / (itemWidth + itemSpacing)))
         }
     }
     var maxNumberOfItemsInSection: Int {
@@ -53,19 +52,22 @@ class MyCollectionView: UICollectionView {
         }
     }
     
-    
     /** 初始化函数 */
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
-        setDefaults()
+        initDefaultSettings()
     }
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        setDefaults()
+        initDefaultSettings()
     }
     /** 默认设置 */
-    private func setDefaults(){
+    private func initDefaultSettings(){
+        //View设置
         self.backgroundColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 0.1)
+        self.showsHorizontalScrollIndicator = true
+        self.pagingEnabled = true
+        //流布局设置
         flowLayout.scrollDirection = UICollectionViewScrollDirection.Horizontal
     }
     /** 更新视图 */
@@ -89,5 +91,4 @@ class MyCollectionView: UICollectionView {
     func setItemSpacing(itemSpacing space: CGFloat) {
         itemSpacing = space
     }
-    
 }
