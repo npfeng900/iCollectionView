@@ -4,6 +4,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
         <!--Main View Controller-->
@@ -38,14 +39,26 @@
                                                 <imageView userInteractionEnabled="NO" tag="1" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ZLa-YI-TKz">
                                                     <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
                                                 </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fAR-Vj-FVg">
+                                                    <rect key="frame" x="40" y="133" width="150" height="67"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="highlightedColor" red="0.11390417069196701" green="0.5696912407875061" blue="0.9994317889213562" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="shadowColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <size key="shadowOffset" width="1" height="1"/>
+                                                </label>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
+                                            <constraint firstItem="fAR-Vj-FVg" firstAttribute="leading" secondItem="ZLa-YI-TKz" secondAttribute="trailing" multiplier="1:5" id="4RJ-bc-cOv"/>
+                                            <constraint firstItem="fAR-Vj-FVg" firstAttribute="trailing" secondItem="ZLa-YI-TKz" secondAttribute="trailing" multiplier="19:20" id="PrI-Ef-Nac"/>
                                             <constraint firstItem="ZLa-YI-TKz" firstAttribute="leading" secondItem="crA-Wm-PmY" secondAttribute="leadingMargin" constant="-8" id="SjJ-Zb-G3M"/>
-                                            <constraint firstAttribute="bottomMargin" secondItem="ZLa-YI-TKz" secondAttribute="bottom" constant="-8" id="bR6-lY-95p"/>
+                                            <constraint firstItem="ZLa-YI-TKz" firstAttribute="bottom" secondItem="crA-Wm-PmY" secondAttribute="bottomMargin" constant="8" id="bR6-lY-95p"/>
                                             <constraint firstItem="ZLa-YI-TKz" firstAttribute="top" secondItem="crA-Wm-PmY" secondAttribute="topMargin" constant="-8" id="jrw-a1-pfU"/>
-                                            <constraint firstAttribute="trailingMargin" secondItem="ZLa-YI-TKz" secondAttribute="trailing" constant="-8" id="mSH-1o-hPI"/>
+                                            <constraint firstItem="ZLa-YI-TKz" firstAttribute="trailing" secondItem="crA-Wm-PmY" secondAttribute="trailingMargin" constant="8" id="mSH-1o-hPI"/>
+                                            <constraint firstItem="fAR-Vj-FVg" firstAttribute="bottom" secondItem="ZLa-YI-TKz" secondAttribute="bottom" id="vHD-hg-O4h"/>
+                                            <constraint firstItem="fAR-Vj-FVg" firstAttribute="top" secondItem="ZLa-YI-TKz" secondAttribute="bottom" multiplier="2:3" id="zU8-h7-YkF"/>
                                         </constraints>
                                     </collectionViewCell>
                                 </cells>

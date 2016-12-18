@@ -52,7 +52,7 @@ class MyCollectionView: UICollectionView {
         }
     }
     
-    /** 初始化函数 */
+    /** 构造函数 */
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
         initDefaultSettings()
@@ -61,7 +61,7 @@ class MyCollectionView: UICollectionView {
         super.init(coder: aDecoder)
         initDefaultSettings()
     }
-    /** 默认设置 */
+    /** 初始化默认设置 */
     private func initDefaultSettings(){
         //View设置
         self.backgroundColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 0.1)
@@ -69,6 +69,46 @@ class MyCollectionView: UICollectionView {
         self.pagingEnabled = true
         //流布局设置
         flowLayout.scrollDirection = UICollectionViewScrollDirection.Horizontal
+        //Notisfication
+        //手势通知：长按
+        self.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: "longPressed:"))
+    }
+    /** 析构函数 */
+    deinit {
+        // 移除手势滑动通知
+        if let gNotisfications = self.gestureRecognizers
+        {
+            for gNotisfication in gNotisfications
+            {
+                self.removeGestureRecognizer(gNotisfication)
+            }
+        }
+    }
+    /** 手势通知：长按处理函数 */
+    func longPressed(longGesture: UILongPressGestureRecognizer) {
+        switch longGesture.state
+        {
+        case UIGestureRecognizerState.Began:
+            //判断手势落点位置是否在路径上
+            if let indexPath = self.indexPathForItemAtPoint(longGesture.locationInView(self))
+            {
+                //在路径上则开始移动该路径上的cell
+                self.beginInteractiveMovementForItemAtIndexPath(indexPath)
+            }
+            break
+        case UIGestureRecognizerState.Changed:
+            //移动过程当中随时更新cell位置
+            self.updateInteractiveMovementTargetPosition(longGesture.locationInView(self))
+            break;
+        case UIGestureRecognizerState.Ended:
+            //移动结束后关闭cell移动
+            self.endInteractiveMovement()
+            break;
+        default:
+            //关闭cell移动
+            self.cancelInteractiveMovement()
+            break
+        }
     }
     /** 更新视图 */
     private func updateViews() {
