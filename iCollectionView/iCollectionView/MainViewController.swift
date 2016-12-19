@@ -71,10 +71,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     /** update视图布局 */
     private func updateLayout() {
         //collectionView布局设置
-        let itemWidth: CGFloat = 135
-        let itemSpace: CGFloat = 5
-        self.collectionView.setItemWidth(itemWidth: itemWidth)
-        self.collectionView.setItemSpacing(itemSpacing: itemSpace)
+        self.collectionView.setItemWidthAndSpacing(itemWidth: 135, itemSpacing: 5)
     }
     /*********************************************************************/
     //MARK: - UICollectionViewDataSource

@@ -24,6 +24,11 @@ class MyCollectionView: UICollectionView {
             self.reloadData() //调用UICollectionViewDataSource代理方法,方法执行时间可能滞后或者不执行
         }
     }
+    /** 设置布局信息 */
+    func setItemWidthAndSpacing(itemWidth width: CGFloat, itemSpacing space: CGFloat) {
+        itemWidth = width
+        itemSpacing = space
+    }
     /** 数据信息 */
     var totalNumberOfItems: Int = 0 {
         didSet{
@@ -123,12 +128,5 @@ class MyCollectionView: UICollectionView {
         flowLayout.sectionInset = UIEdgeInsets(top: verticalSectionInset, left: horizontalSectionInset, bottom: verticalSectionInset, right: horizontalSectionInset)
         //设置collectionView的基本布局属性
         self.setCollectionViewLayout(flowLayout, animated: true)
-    }
-    /** 设置Cell尺寸和间隔 */
-    func setItemWidth(itemWidth width: CGFloat) {
-        itemWidth = width
-    }
-    func setItemSpacing(itemSpacing space: CGFloat) {
-        itemSpacing = space
     }
 }
