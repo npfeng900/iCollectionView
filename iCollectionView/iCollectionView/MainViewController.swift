@@ -10,68 +10,38 @@ import UIKit
 
 class MainViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
 
-    @IBOutlet weak var collectionView: MyCollectionView!
+    /*********************************************************************/
+    //MARK: - Model
     struct ImageInfo {
         var imageName: String?
         var imagePath: String?
+        var beenSelected: Bool = false
     }
     var images = [ImageInfo]()
-    /*********************************************************************/
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        initData()
-        initNotifications()
-    }
-    deinit {
-        deinitNotifications()
-    }
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        //viewDidAppear之后，autolayout才开始工作
-        updateLayout()
-    }
-    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        return UIInterfaceOrientationMask.All
-    }
-    /*********************************************************************/
-    //MARK: - SelfDefine
     /** init模型数据 */
     private func initData() {
         let imagePaths = NSBundle.mainBundle().pathsForResourcesOfType("jpg", inDirectory: "SupportFiles")
         for imagePath in imagePaths {
             let imageName = (NSString(string: imagePath).lastPathComponent as NSString).stringByDeletingPathExtension
-            images.append(ImageInfo(imageName: imageName, imagePath: imagePath))
+            images.append(ImageInfo(imageName: imageName, imagePath: imagePath, beenSelected: false))
         }
         self.collectionView.totalNumberOfItems = images.count
     }
-    /** init通知消息 */
-    private func initNotifications() {
-        // 添加设备方向变化的消息通知
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "orientationChanged:", name: UIDeviceOrientationDidChangeNotification, object: nil)
+    /*********************************************************************/
+    //MARK: - Outlet
+    @IBOutlet weak var collectionView: MyCollectionView!
+    /*********************************************************************/
+    //MARK: - ViewCtroller Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        initData()
     }
-    /** deninit通知消息 */
-    private func deinitNotifications() {
-        // 移除设备方向变化的消息通知
-        NSNotificationCenter.defaultCenter().removeObserver(UIDeviceOrientationDidChangeNotification)
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        collectionView.setItemWidthAndSpacing(itemWidth: 130, itemSpacing: 10)
     }
-    /** 设备方向变化的通知处理函数 */
-    func orientationChanged(notification: NSNotification) {
-        switch UIDevice.currentDevice().orientation
-        {
-        //下面四种情况，重新布局
-        case .Portrait, .PortraitUpsideDown, .LandscapeLeft, .LandscapeRight:
-            updateLayout()
-            break
-        //剩余情况，无变化
-        default:
-            break
-        }
-    }
-    /** update视图布局 */
-    private func updateLayout() {
-        //collectionView布局设置
-        self.collectionView.setItemWidthAndSpacing(itemWidth: 135, itemSpacing: 5)
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.All
     }
     /*********************************************************************/
     //MARK: - UICollectionViewDataSource
@@ -81,10 +51,12 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     /** numberOfItemsInSection */
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        //最后一个Section
         if section == self.collectionView.totalNumberOfSections - 1
         {
             return self.collectionView.totalNumberOfItems % self.collectionView.maxNumberOfItemsInSection
         }
+        //非最后一个Section
         return self.collectionView.maxNumberOfItemsInSection
     }
     /** cellForItemAtIndexPath */
@@ -93,9 +65,10 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         
         let cellID = "ReuseCell"
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellID, forIndexPath: indexPath)
+        
         let imageView = cell.viewWithTag(1) as! UIImageView
         imageView.image = UIImage(contentsOfFile: images[index].imagePath!)
-        imageView.layer.opacity = 1
+        imageView.layer.opacity = images[index].beenSelected ? 0.5 : 1.0
         
         let label = cell.viewWithTag(2) as! UILabel
         label.font = UIFont.preferredFontForTextStyle(UIFontTextStyleHeadline)
@@ -121,9 +94,11 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let cell = collectionView.cellForItemAtIndexPath(indexPath)
         let imageView = cell?.viewWithTag(1)
-        imageView?.layer.borderWidth = 2
-        imageView?.layer.borderColor = UIColor(red: 0, green: 148/255, blue: 247/255, alpha: 1).CGColor
-        imageView?.layer.opacity = 1.0
+        //imageView?.layer.borderWidth = 2
+        //imageView?.layer.borderColor = UIColor(red: 0, green: 148/255, blue: 247/255, alpha: 1).CGColor
+        let index = indexPath.section * self.collectionView.maxNumberOfItemsInSection + indexPath.row
+        images[index].beenSelected = true
+        imageView?.layer.opacity = images[index].beenSelected ? 0.5 : 1.0
     }
     /** shouldShowMenuForItemAtIndexPath
     func collectionView(collectionView: UICollectionView, shouldShowMenuForItemAtIndexPath indexPath: NSIndexPath) -> Bool {

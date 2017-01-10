@@ -10,113 +10,32 @@ import UIKit
 
 class MyCollectionView: UICollectionView {
 
-    private let flowLayout = UICollectionViewFlowLayout()
-    /** 布局信息 */
-    private var itemWidth: CGFloat = 125 {
-        didSet{
-            updateViews()
-            self.reloadData() //调用UICollectionViewDataSource代理方法,方法执行时间可能滞后或者不执行
-        }
-    }
-    private var itemSpacing: CGFloat = 5 {
-        didSet{
-            updateViews()
-            self.reloadData() //调用UICollectionViewDataSource代理方法,方法执行时间可能滞后或者不执行
-        }
-    }
+    /*********************************************************************/
     /** 设置布局信息 */
     func setItemWidthAndSpacing(itemWidth width: CGFloat, itemSpacing space: CGFloat) {
         itemWidth = width
         itemSpacing = space
+        
+        //print(" \(frame.size) \(flowLayout.sectionInset.left) \(flowLayout.sectionInset.top) \(rowsNum) \(columnsNum)")
     }
-    /** 数据信息 */
-    var totalNumberOfItems: Int = 0 {
+    /** 布局信息 */
+    private var itemWidth: CGFloat = 125 {
         didSet{
-            self.reloadData() //调用UICollectionViewDataSource代理方法,方法执行时间可能滞后或者不执行
+            updateFlowLayout()
+            reloadData() //调用UICollectionViewDataSource代理方法,方法执行时间可能滞后或者不执行
         }
     }
-    /** 只读计算属性 */
-    private var columnsNum: Int {
-        get{ 
-            return Int(floor(self.bounds.width / (itemWidth + itemSpacing)))
-        }
-    }
-    private var rowsNum: Int {
-        get{
-            return Int(floor(self.bounds.height / (itemWidth + itemSpacing)))
-        }
-    }
-    var maxNumberOfItemsInSection: Int {
-        get{
-            return Int(columnsNum * rowsNum)
-        }
-    }
-    var totalNumberOfSections:Int {
-        get{
-            return Int(ceil( Float(totalNumberOfItems) / Float(maxNumberOfItemsInSection) ))
-        }
-    }
-    
-    /** 构造函数 */
-    override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
-        super.init(frame: frame, collectionViewLayout: layout)
-        initDefaultSettings()
-    }
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        initDefaultSettings()
-    }
-    /** 初始化默认设置 */
-    private func initDefaultSettings(){
-        //View设置
-        self.backgroundColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 0.1)
-        self.showsHorizontalScrollIndicator = true
-        self.pagingEnabled = true
-        //流布局设置
-        flowLayout.scrollDirection = UICollectionViewScrollDirection.Horizontal
-        //Notisfication
-        //手势通知：长按
-        self.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: "longPressed:"))
-    }
-    /** 析构函数 */
-    deinit {
-        // 移除手势滑动通知
-        if let gNotisfications = self.gestureRecognizers
-        {
-            for gNotisfication in gNotisfications
-            {
-                self.removeGestureRecognizer(gNotisfication)
-            }
-        }
-    }
-    /** 手势通知：长按处理函数 */
-    func longPressed(longGesture: UILongPressGestureRecognizer) {
-        switch longGesture.state
-        {
-        case UIGestureRecognizerState.Began:
-            //判断手势落点位置是否在路径上
-            if let indexPath = self.indexPathForItemAtPoint(longGesture.locationInView(self))
-            {
-                //在路径上则开始移动该路径上的cell
-                self.beginInteractiveMovementForItemAtIndexPath(indexPath)
-            }
-            break
-        case UIGestureRecognizerState.Changed:
-            //移动过程当中随时更新cell位置
-            self.updateInteractiveMovementTargetPosition(longGesture.locationInView(self))
-            break;
-        case UIGestureRecognizerState.Ended:
-            //移动结束后关闭cell移动
-            self.endInteractiveMovement()
-            break;
-        default:
-            //关闭cell移动
-            self.cancelInteractiveMovement()
-            break
+    private var itemSpacing: CGFloat = 5 {
+        didSet{
+            updateFlowLayout()
+            reloadData() //调用UICollectionViewDataSource代理方法,方法执行时间可能滞后或者不执行
         }
     }
     /** 更新视图 */
-    private func updateViews() {
+    private func updateFlowLayout() {
+        let flowLayout = UICollectionViewFlowLayout()
+        //滑动方向设置
+        flowLayout.scrollDirection = UICollectionViewScrollDirection.Horizontal
         //cell宽度和高度
         flowLayout.itemSize = CGSize(width:itemWidth, height:itemWidth)
         //cell间隔
@@ -127,6 +46,80 @@ class MyCollectionView: UICollectionView {
         let verticalSectionInset = (self.bounds.height - itemSpacing * CGFloat(rowsNum - 1) - itemWidth * CGFloat(rowsNum)) / 2.0
         flowLayout.sectionInset = UIEdgeInsets(top: verticalSectionInset, left: horizontalSectionInset, bottom: verticalSectionInset, right: horizontalSectionInset)
         //设置collectionView的基本布局属性
-        self.setCollectionViewLayout(flowLayout, animated: true)
+        setCollectionViewLayout(flowLayout, animated: true)
     }
+    /*********************************************************************/
+    /** 数据信息 */
+    var totalNumberOfItems: Int = 0 {
+        didSet{
+            reloadData() //调用UICollectionViewDataSource代理方法,方法执行时间可能滞后或者不执行
+        }
+    }
+    /*********************************************************************/
+    /** 只读计算属性 */
+    var totalNumberOfSections:Int {
+        get{
+            return Int(ceil( Float(totalNumberOfItems) / Float(maxNumberOfItemsInSection) ))
+        }
+    }
+    var maxNumberOfItemsInSection: Int {
+        get{
+            return Int(columnsNum * rowsNum)
+        }
+    }
+    private var columnsNum: Int {
+        get{ 
+            return Int(floor(self.bounds.width / (itemWidth + itemSpacing)))
+        }
+    }
+    private var rowsNum: Int {
+        get{
+            return Int(floor(self.bounds.height / (itemWidth + itemSpacing)))
+        }
+    }
+    /*********************************************************************/
+    /** 构造函数 */
+    override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
+        super.init(frame: frame, collectionViewLayout: layout)
+        initDefaultSettings()
+    }
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        initDefaultSettings()
+    }
+    private func initDefaultSettings(){
+        //View设置
+        self.backgroundColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 0.1)
+        self.showsHorizontalScrollIndicator = true
+        self.pagingEnabled = true
+        //Notisfication手势通知：长按
+        self.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: "longPressed:"))
+    }
+    /** 析构函数 */
+    deinit {
+        // 移除手势滑动通知
+        if let notifies = self.gestureRecognizers {
+            for notify in notifies {
+                self.removeGestureRecognizer(notify)
+            }
+        }
+    }
+    /** 手势通知：长按处理函数 */
+    func longPressed(longGesture: UILongPressGestureRecognizer) {
+        switch longGesture.state
+        {
+        case UIGestureRecognizerState.Began:    //判断手势落点位置是否在路径上
+            if let indexPath = self.indexPathForItemAtPoint(longGesture.locationInView(self))
+            {   //在路径上则开始移动该路径上的cell
+                self.beginInteractiveMovementForItemAtIndexPath(indexPath)
+            }
+        case UIGestureRecognizerState.Changed:  //移动过程当中随时更新cell位置
+            self.updateInteractiveMovementTargetPosition(longGesture.locationInView(self))
+        case UIGestureRecognizerState.Ended:    //移动结束后关闭cell移动
+            self.endInteractiveMovement()
+        default:                                //关闭cell移动
+            self.cancelInteractiveMovement()
+        }
+    }
+    /*********************************************************************/
 }

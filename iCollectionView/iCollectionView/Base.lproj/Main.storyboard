@@ -20,7 +20,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="redraw" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="ogR-k9-abU" customClass="MyCollectionView" customModule="iCollectionView">
-                                <rect key="frame" x="0.0" y="40" width="600" height="540"/>
+                                <rect key="frame" x="20" y="30" width="560" height="560"/>
                                 <color key="backgroundColor" red="1" green="0.91173360059999997" blue="0.908404879" alpha="1" colorSpace="calibratedRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="H7z-2G-yHl">
                                     <size key="itemSize" width="200" height="200"/>
@@ -41,7 +41,7 @@
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="2" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fAR-Vj-FVg">
                                                     <rect key="frame" x="40" y="133" width="150" height="67"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="highlightedColor" red="0.11390417069196701" green="0.5696912407875061" blue="0.9994317889213562" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <color key="shadowColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -70,10 +70,10 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="ogR-k9-abU" firstAttribute="top" secondItem="mCY-y8-Bgz" secondAttribute="bottom" constant="20" id="1eK-bQ-qJh"/>
-                            <constraint firstItem="ogR-k9-abU" firstAttribute="bottom" secondItem="5tD-iB-3wj" secondAttribute="top" constant="-20" id="Bjx-Ft-KHN"/>
-                            <constraint firstItem="ogR-k9-abU" firstAttribute="trailing" secondItem="jJA-pX-eK0" secondAttribute="trailingMargin" constant="20" id="Occ-dX-GrV"/>
-                            <constraint firstItem="ogR-k9-abU" firstAttribute="leading" secondItem="jJA-pX-eK0" secondAttribute="leadingMargin" constant="-20" id="Wq8-bt-Bxb"/>
+                            <constraint firstItem="ogR-k9-abU" firstAttribute="top" secondItem="mCY-y8-Bgz" secondAttribute="bottom" constant="10" id="1eK-bQ-qJh"/>
+                            <constraint firstItem="ogR-k9-abU" firstAttribute="bottom" secondItem="5tD-iB-3wj" secondAttribute="top" constant="-10" id="Bjx-Ft-KHN"/>
+                            <constraint firstItem="ogR-k9-abU" firstAttribute="trailing" secondItem="jJA-pX-eK0" secondAttribute="trailingMargin" id="Occ-dX-GrV"/>
+                            <constraint firstItem="ogR-k9-abU" firstAttribute="leading" secondItem="jJA-pX-eK0" secondAttribute="leadingMargin" id="Wq8-bt-Bxb"/>
                         </constraints>
                     </view>
                     <connections>
