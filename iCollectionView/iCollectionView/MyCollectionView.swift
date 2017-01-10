@@ -15,8 +15,6 @@ class MyCollectionView: UICollectionView {
     func setItemWidthAndSpacing(itemWidth width: CGFloat, itemSpacing space: CGFloat) {
         itemWidth = width
         itemSpacing = space
-        
-        //print(" \(frame.size) \(flowLayout.sectionInset.left) \(flowLayout.sectionInset.top) \(rowsNum) \(columnsNum)")
     }
     /** 布局信息 */
     private var itemWidth: CGFloat = 125 {

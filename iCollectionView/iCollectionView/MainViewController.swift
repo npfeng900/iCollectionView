@@ -27,6 +27,12 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         }
         self.collectionView.totalNumberOfItems = images.count
     }
+    /** 常量 */
+    struct Constants {
+        static let ResuseCellIdentify: String = "ReuseCell"
+        static let ImageBeenSelectedOpacity: Float = 0.5
+        static let ImageNeverSelectedOpacity: Float = 1.0
+    }
     /*********************************************************************/
     //MARK: - Outlet
     @IBOutlet weak var collectionView: MyCollectionView!
@@ -38,7 +44,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        collectionView.setItemWidthAndSpacing(itemWidth: 130, itemSpacing: 10)
+        collectionView.setItemWidthAndSpacing(itemWidth: 130, itemSpacing: 5)
     }
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
         return UIInterfaceOrientationMask.All
@@ -63,12 +69,12 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let index = indexPath.section * self.collectionView.maxNumberOfItemsInSection + indexPath.row
         
-        let cellID = "ReuseCell"
+        let cellID = Constants.ResuseCellIdentify
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier(cellID, forIndexPath: indexPath)
         
         let imageView = cell.viewWithTag(1) as! UIImageView
         imageView.image = UIImage(contentsOfFile: images[index].imagePath!)
-        imageView.layer.opacity = images[index].beenSelected ? 0.5 : 1.0
+        imageView.layer.opacity = images[index].beenSelected ? Constants.ImageBeenSelectedOpacity : Constants.ImageNeverSelectedOpacity
         
         let label = cell.viewWithTag(2) as! UILabel
         label.font = UIFont.preferredFontForTextStyle(UIFontTextStyleHeadline)
@@ -98,7 +104,7 @@ class MainViewController: UIViewController, UICollectionViewDelegate, UICollecti
         //imageView?.layer.borderColor = UIColor(red: 0, green: 148/255, blue: 247/255, alpha: 1).CGColor
         let index = indexPath.section * self.collectionView.maxNumberOfItemsInSection + indexPath.row
         images[index].beenSelected = true
-        imageView?.layer.opacity = images[index].beenSelected ? 0.5 : 1.0
+        imageView?.layer.opacity = images[index].beenSelected ? Constants.ImageBeenSelectedOpacity : Constants.ImageNeverSelectedOpacity
     }
     /** shouldShowMenuForItemAtIndexPath
     func collectionView(collectionView: UICollectionView, shouldShowMenuForItemAtIndexPath indexPath: NSIndexPath) -> Bool {
