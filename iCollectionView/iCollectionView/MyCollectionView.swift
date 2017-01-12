@@ -47,10 +47,6 @@ class MyCollectionView: UICollectionView {
         setCollectionViewLayout(flowLayout, animated: true)
     }
     /*********************************************************************/
-    var isEidting: Bool = false
-    struct Constants {
-        static let ItemWidthDvalue: Float = 2.5
-    }
     /** 数据信息 */
     var totalNumberOfItems: Int = 0 {
         didSet{
@@ -94,10 +90,10 @@ class MyCollectionView: UICollectionView {
         self.backgroundColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 0.1)
         self.showsHorizontalScrollIndicator = true
         self.pagingEnabled = true
-        //Notisfication手势通知888
-        //self.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: "longPressed:"))
-        //self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tap:"))
-        //self.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: "pan:"))
+        //Notisfication手势通知
+        self.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: "longPressed:"))
+        self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tap:"))
+        self.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: "pan:"))
     }
     /** 析构函数 */
     deinit {
@@ -108,36 +104,32 @@ class MyCollectionView: UICollectionView {
             }
         }
     }
-    
+    /*********************************************************************/
+    var isEidting: Bool = false {
+        didSet {
+            if isEidting == true {
+                enterEditing()
+            }
+            else {
+                resignEditing()
+            }
+        }
+    }
+    struct Constants {
+        static let ItemWidthDvalue: Float = 2.5
+    }
+    /*********************************************************************/
     /** 手势通知：长按处理函数 */
     func longPressed(longGesture: UILongPressGestureRecognizer) {
-        if isEidting == false
-        {
-            enterEditing()
-            isEidting = true
-        }
-        
-        
-        /*
-        switch longGesture.state
-        {
-        case UIGestureRecognizerState.Began:    //判断手势落点位置是否在路径上
-            if let indexPath = self.indexPathForItemAtPoint(longGesture.locationInView(self))
-            {   //在路径上则开始移动该路径上的cell
-                self.beginInteractiveMovementForItemAtIndexPath(indexPath)
+        if self.indexPathForItemAtPoint(longGesture.locationInView(self)) != nil {
+            if isEidting == false {
+                isEidting = true
             }
-        case UIGestureRecognizerState.Changed:  //移动过程当中随时更新cell位置
-            self.updateInteractiveMovementTargetPosition(longGesture.locationInView(self))
-        case UIGestureRecognizerState.Ended:    //移动结束后关闭cell移动
-            self.endInteractiveMovement()
-        default:                                //关闭cell移动
-            self.cancelInteractiveMovement()
-        }*/
+        }
     }
     func tap(tapGesture: UITapGestureRecognizer) {
         if self.indexPathForItemAtPoint(tapGesture.locationInView(self)) == nil {
             if isEidting == true {
-                resignEditing()
                 isEidting = false
             }
         }
@@ -147,22 +139,36 @@ class MyCollectionView: UICollectionView {
         {
             switch panGesture.state
             {
-            default:
-                break
+            case UIGestureRecognizerState.Began:    //判断手势落点位置是否在路径上
+                if let indexPath = self.indexPathForItemAtPoint(panGesture.locationInView(self))
+                {   //在路径上则开始移动该路径上的cell
+                    self.beginInteractiveMovementForItemAtIndexPath(indexPath)
+                }
+            case UIGestureRecognizerState.Changed:  //移动过程当中随时更新cell位置
+                self.updateInteractiveMovementTargetPosition(panGesture.locationInView(self))
+            case UIGestureRecognizerState.Ended:    //移动结束后关闭cell移动
+                self.endInteractiveMovement()
+            default:                                //关闭cell移动
+                self.cancelInteractiveMovement()
             }
         }
     }
     //进入编辑状态
     func enterEditing() {
-        let newItemWidth = itemWidth - CGFloat(Constants.ItemWidthDvalue)
-        let newItemSpacing = itemSpacing + CGFloat(2*Constants.ItemWidthDvalue)
-        setItemWidthAndSpacing(itemWidth: newItemWidth, itemSpacing: newItemSpacing)
+        //动画
+        UIView.animateWithDuration(0.3) { () -> Void in
+            let newItemWidth = self.itemWidth - CGFloat(Constants.ItemWidthDvalue)
+            let newItemSpacing = self.itemSpacing + CGFloat(2*Constants.ItemWidthDvalue)
+            self.setItemWidthAndSpacing(itemWidth: newItemWidth, itemSpacing: newItemSpacing)
+        }
     }
     //离开编辑状态
     func resignEditing() {
-        let newItemWidth = itemWidth + CGFloat(Constants.ItemWidthDvalue)
-        let newItemSpacing = itemSpacing - CGFloat(2*Constants.ItemWidthDvalue)
-        setItemWidthAndSpacing(itemWidth: newItemWidth, itemSpacing: newItemSpacing)
+        UIView.animateWithDuration(0.3) {
+            let newItemWidth = self.itemWidth + CGFloat(Constants.ItemWidthDvalue)
+            let newItemSpacing = self.itemSpacing - CGFloat(2*Constants.ItemWidthDvalue)
+            self.setItemWidthAndSpacing(itemWidth: newItemWidth, itemSpacing: newItemSpacing)
+        }
     }
     
     /*********************************************************************/
