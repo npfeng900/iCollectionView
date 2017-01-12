@@ -47,6 +47,10 @@ class MyCollectionView: UICollectionView {
         setCollectionViewLayout(flowLayout, animated: true)
     }
     /*********************************************************************/
+    var isEidting: Bool = false
+    struct Constants {
+        static let ItemWidthDvalue: Float = 2.5
+    }
     /** 数据信息 */
     var totalNumberOfItems: Int = 0 {
         didSet{
@@ -90,8 +94,10 @@ class MyCollectionView: UICollectionView {
         self.backgroundColor = UIColor(red: 255/255, green: 0/255, blue: 0/255, alpha: 0.1)
         self.showsHorizontalScrollIndicator = true
         self.pagingEnabled = true
-        //Notisfication手势通知：长按
-        self.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: "longPressed:"))
+        //Notisfication手势通知888
+        //self.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: "longPressed:"))
+        //self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tap:"))
+        //self.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: "pan:"))
     }
     /** 析构函数 */
     deinit {
@@ -102,8 +108,17 @@ class MyCollectionView: UICollectionView {
             }
         }
     }
+    
     /** 手势通知：长按处理函数 */
     func longPressed(longGesture: UILongPressGestureRecognizer) {
+        if isEidting == false
+        {
+            enterEditing()
+            isEidting = true
+        }
+        
+        
+        /*
         switch longGesture.state
         {
         case UIGestureRecognizerState.Began:    //判断手势落点位置是否在路径上
@@ -117,7 +132,38 @@ class MyCollectionView: UICollectionView {
             self.endInteractiveMovement()
         default:                                //关闭cell移动
             self.cancelInteractiveMovement()
+        }*/
+    }
+    func tap(tapGesture: UITapGestureRecognizer) {
+        if self.indexPathForItemAtPoint(tapGesture.locationInView(self)) == nil {
+            if isEidting == true {
+                resignEditing()
+                isEidting = false
+            }
         }
     }
+    func pan(panGesture: UIPanGestureRecognizer) {
+        if isEidting
+        {
+            switch panGesture.state
+            {
+            default:
+                break
+            }
+        }
+    }
+    //进入编辑状态
+    func enterEditing() {
+        let newItemWidth = itemWidth - CGFloat(Constants.ItemWidthDvalue)
+        let newItemSpacing = itemSpacing + CGFloat(2*Constants.ItemWidthDvalue)
+        setItemWidthAndSpacing(itemWidth: newItemWidth, itemSpacing: newItemSpacing)
+    }
+    //离开编辑状态
+    func resignEditing() {
+        let newItemWidth = itemWidth + CGFloat(Constants.ItemWidthDvalue)
+        let newItemSpacing = itemSpacing - CGFloat(2*Constants.ItemWidthDvalue)
+        setItemWidthAndSpacing(itemWidth: newItemWidth, itemSpacing: newItemSpacing)
+    }
+    
     /*********************************************************************/
 }
